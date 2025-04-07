@@ -1,4 +1,8 @@
-import { Link } from "react-router-dom";
+import { Link, Route, Routes } from "react-router-dom";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import SinglePost from "./pages/SiglePost";
 // import { useQuery } from "@apollo/client";
 // import { graphql } from "./gql"; // ⚠️ 这里先注释掉，等后端启动后再打开
 
@@ -31,21 +35,12 @@ function App() {
   const articles = mockData;
 
   return (
-    <>
-      <h1>Articles</h1>
-      <ul>
-        {articles.map((article) => (
-          <Link to={`/article/${article.id}`} key={article.id}>
-            <li>
-              <h2>{article.title}</h2>
-              <p>By {article.author.name}</p>
-              <p>👍 {article.likes} Likes</p>
-            </li>
-          </Link>
-        ))}
-      </ul>
-      <Link to="/login">Login</Link> | <Link to="/register">Register</Link>
-    </>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/article/:articleId" element={<SinglePost />} />
+  </Routes>
   );
 }
 
