@@ -6,7 +6,7 @@ import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { cors: true });
+  const app = await NestFactory.create(AppModule);
 
   // Versionning
   app.setGlobalPrefix('api/v1');
@@ -30,11 +30,23 @@ async function bootstrap() {
 
   // Middlewares
   app.use(cookieParser(process.env.COOKIE_SECRET));
-  app.use(helmet())
+  app.use(
+    helmet({
+      contentSecurityPolicy: {
+        directives: {
+          defaultSrc: ["'self'"],
+          imgSrc: ["'self'", 'data:', 'cdn.jsdelivr.net'],
+          scriptSrc: ["'self'", "'unsafe-inline'", 'cdn.jsdelivr.net'],
+          styleSrc: ["'self'", "'unsafe-inline'", 'cdn.jsdelivr.net'],
+        },
+      },
+    })
+  );
 
   // Enable CORS 
   app.enableCors({
     origin: process.env.FRONTEND_URL,
+    credentials: true,
   });
 
   await app.listen(process.env.PORT ?? 3333);

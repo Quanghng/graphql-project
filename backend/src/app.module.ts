@@ -7,11 +7,24 @@ import { join } from 'path';
 import { Request } from 'express';
 
 @Module({
-  imports: [GraphQLModule.forRoot<ApolloDriverConfig>({
-    driver: ApolloDriver,
-    autoSchemaFile: join(process.cwd(), 'src/schema.gql'), // auto-generate schema
-    context: ({ req }: { req: Request }) => ({ req }), // attach req to context for auth
-  }), ConfigModule.forRoot({ isGlobal: true }), CsrfModule, AuthModule, UserModule, PostModule, PrismaModule],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true, 
+    }),
+
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      autoSchemaFile: join(process.cwd(), 'src/schema.gql'), 
+      playground: true, 
+      installSubscriptionHandlers: false, 
+    }),
+
+    CsrfModule,
+    AuthModule,
+    UserModule,
+    PostModule,
+    PrismaModule,
+  ],
   controllers: [],
   providers: [],
 })

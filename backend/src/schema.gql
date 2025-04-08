@@ -1,0 +1,59 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type AuthResponse {
+  accessToken: String!
+  refreshToken: String!
+}
+
+type UserModel {
+  id: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  email: String!
+  hash: String!
+  posts: [PostModel!]
+  comments: [CommentModel!]
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type PostModel {
+  id: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  title: String!
+  content: String!
+  likes: Int!
+  user: UserModel!
+  userId: Int!
+  comments: [CommentModel!]
+}
+
+type CommentModel {
+  id: Int!
+  content: String!
+  likes: Int!
+  post: PostModel!
+  postId: Int!
+  user: UserModel!
+  userId: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Query {
+  users: [UserModel!]!
+  user(id: Int!): UserModel
+  posts: [PostModel!]!
+}
+
+type Mutation {
+  register(email: String!, password: String!): AuthResponse!
+  login(email: String!, password: String!): AuthResponse!
+  createPost(title: String!, content: String!): PostModel!
+}

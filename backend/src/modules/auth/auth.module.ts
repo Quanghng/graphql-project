@@ -6,6 +6,7 @@ import { PrismaService } from "src/modules/prisma/prisma.service";
 import { ConfigService } from "@nestjs/config";
 import { CsrfGuard } from "../csrf/guards/csrf.guards";
 import { AccessTokenStrategy, RefreshTokenStrategy } from "../csrf/strategies";
+import { AuthResolver } from "./auth.resolver";
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { AccessTokenStrategy, RefreshTokenStrategy } from "../csrf/strategies";
   controllers: [AuthController],
   providers: [
     AuthService,
+    AuthResolver, 
     CsrfGuard,
     AccessTokenStrategy,
     RefreshTokenStrategy,

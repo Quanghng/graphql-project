@@ -21,9 +21,9 @@ export class PostModel {
   @Field(type => String)
   comments: string;
 
-  @Field(type => UserModel)
-  author: UserModel;
+  @Field(() => UserModel)
+  user: UserModel;  
 
   @Field(type => Number)
-  authorId: number;
+  userId: number;
 }

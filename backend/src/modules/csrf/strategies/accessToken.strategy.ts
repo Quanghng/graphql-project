@@ -27,6 +27,7 @@ export class AccessTokenStrategy extends PassportStrategy(Strategy, 'jwt') {
       ])
     }
 
+    console.log('JWT secret: ', process.env.JWT_ACCESS_TOKEN_SECRET)
     super({
       jwtFromRequest: extratedJWT,
       secretOrKey: process.env.JWT_ACCESS_TOKEN_SECRET as string,
