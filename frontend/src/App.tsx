@@ -8,9 +8,9 @@ import SinglePost from "./pages/SiglePost";
 
 // WAIT for backend to be ready
 
-// const GET_ARTICLES = graphql(`
-//   query GetArticles {
-//     articles {
+// const GET_POSTS = graphql(`
+//   query GetPosts {
+//     post {
 //       id
 //       title
 //       author {

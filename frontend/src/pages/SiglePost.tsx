@@ -38,6 +38,14 @@ const SinglePost = () => {
 
   return (
     <div className="p-6 max-w-3xl mx-auto">
+      <div className="mb-4">
+        <Button variant="outline" asChild>
+          <a href="/" className="flex items-center gap-2">
+            ← Back to Home
+          </a>
+        </Button>
+      </div>
+      
       <Card className="mb-6">
         <CardHeader>
           <CardTitle>{post.title}</CardTitle>
