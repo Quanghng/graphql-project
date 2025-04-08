@@ -1,13 +1,11 @@
 import { Module } from "@nestjs/common";
-import { AuthController } from "./auth.conotroller";
+import { AuthController } from "./auth.controller";
 import { AuthService } from "./auth.service";
 import { JwtModule, JwtService } from "@nestjs/jwt";
-import { CsrfGuard } from "src/csrf/guards/csrf.guards";
-import { AccessTokenStrategy } from "src/csrf/strategies/accessToken.strategy";
-import { RefreshTokenStrategy } from "src/csrf/strategies/refreshToken.strategy";
-import { CsrfService } from "src/csrf/csrf.service";
 import { PrismaService } from "src/modules/prisma/prisma.service";
 import { ConfigService } from "@nestjs/config";
+import { CsrfGuard } from "../csrf/guards/csrf.guards";
+import { AccessTokenStrategy, RefreshTokenStrategy } from "../csrf/strategies";
 
 @Module({
   imports: [

@@ -2,11 +2,10 @@ import { Body, Controller, Post, Req, Res, UseGuards, Version } from "@nestjs/co
 import { AuthService } from "./auth.service";
 import { ApiTags } from "@nestjs/swagger";
 import { AuthDto } from "./dto";
-import { CsrfGuard } from "src/csrf/guards/csrf.guards";
 import { Request, Response } from "express";
 import { TokenDto } from "./dto/tokens.dto";
-import { AccessTokenGuards } from "./guards/accessToken.guard";
-import { RefreshTokenGuard } from "./guards/refreshToken.guard";
+import { AccessTokenGuards, RefreshTokenGuard } from "./guards";
+import { CsrfGuard } from "../csrf/guards/csrf.guards";
 
 interface AuthenticatedRequest extends Request {
   user: {
