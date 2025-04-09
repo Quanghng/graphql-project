@@ -3,12 +3,14 @@ import { UserService } from "./user.service";
 import { ThreadService } from "../thread/thread.service";
 import { User } from "./models/user.model";
 import { Thread } from "../thread/models/thread.model";
+import { ThreadLoader } from "../thread/loaders/thread.loader";
 
 @Resolver(() => User)
 export class UserResolver {
   constructor(
+    private readonly threadLoader: ThreadLoader,
     private userService: UserService,
-    private threadService: ThreadService,
+    private threadService: ThreadService
   ) { }
 
   @Query(() => User)
@@ -17,9 +19,7 @@ export class UserResolver {
   }
 
   @ResolveField(() => [Thread])
-  async getThreads(@Parent() user: User) {
-    console.log('user', user);
-    const { id } = user;
-    return this.threadService.getThreadsByUser(id);
+  async getThreads(@Parent() user: User): Promise<Thread[]> {
+    return this.threadLoader.batchThreadsByUser.load(user.id);
   }
 }

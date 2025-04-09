@@ -26,6 +26,7 @@ type Thread {
   likes: Int!
   comments: [Comment!]
   userId: Int!
+  getComments: [Comment!]!
 }
 
 """user"""
@@ -45,15 +46,24 @@ type User {
 
 type Query {
   getUser(id: Int!): User!
+  getThreads: [Thread!]!
 }
 
 type Mutation {
   postThread(inputs: PostThreadDto!): Thread!
+  modifyThread(inputs: ModifyThreadDto!): Thread!
+  deleteThread(threadId: Float!): Thread!
   postComment(inputs: PostCommentDto!): Comment!
 }
 
 input PostThreadDto {
   userId: Int!
+  title: String!
+  content: String!
+}
+
+input ModifyThreadDto {
+  threadId: Int!
   title: String!
   content: String!
 }
