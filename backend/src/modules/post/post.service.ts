@@ -14,8 +14,8 @@ export class PostService {
         user: { connect: { id: userId } },
       },
       include: {
-        user: true,           // 返回 user
-        comments: {           // 以及其中的 comments
+        user: true,           
+        comments: {           
           include: { user: true },
         },
       },
