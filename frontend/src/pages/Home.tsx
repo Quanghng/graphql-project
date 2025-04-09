@@ -10,25 +10,25 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import LikeButton from "@/components/LikeButton";
-import CreatePost from "./CreatePost";
+import CreateThreadModal from "./CreatePost";
 import { MessageCircle } from "lucide-react";
 import CommentSection from "@/components/CommentSection";
 import Layout from "@/components/Layout";
-import { useGetPostsQuery } from '@/gql/generated';
+import { useGetThreadsQuery } from "@/gql/generated";
 
 const Home = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [openComments, setOpenComments] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  const { data, loading, error, refetch } = useGetPostsQuery();
+  const { data, loading, error, refetch } = useGetThreadsQuery();
 
-  const handleLike = (postId: string) => {
-    console.log("Like clicked for post", postId);
+  const handleLike = (threadId: string) => {
+    console.log("Like clicked for post", threadId);
     // Optional: Add mutation for like
   };
 
-  const handleAddComment = (postId: string, content: string) => {
+  const handleAddComment = (threadId: string, content: string) => {
     console.log("Comment added:", content);
     // Optional: Add mutation for comment
   };
@@ -53,43 +53,43 @@ const Home = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {data?.posts?.map((post: any) => (
+          {data?.threads?.map((thread: any) => (
             <Card
-              key={post.id}
+              key={thread.id}
               className="hover:shadow-md transition duration-200 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
             >
-              <Link to={`/post/${post.id}`}>
+              <Link to={`/post/${thread.id}`}>
                 <CardHeader>
-                  <CardTitle>{post.title}</CardTitle>
+                  <CardTitle>{thread.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <CardDescription>
-                    {post.content.substring(0, 100)}...
+                    {thread.content.substring(0, 100)}...
                   </CardDescription>
                   <p className="text-sm text-muted-foreground mt-2 text-gray-600 dark:text-gray-300">
-                    by {post.user.email}
+                    by {thread.user.email}
                   </p>
                 </CardContent>
               </Link>
               <div className="flex items-center justify-end gap-4 px-4 pb-4">
                 <LikeButton
                   liked={false}
-                  likesCount={post.likes}
-                  onClick={() => handleLike(post.id)}
+                  likesCount={thread.likes}
+                  onClick={() => handleLike(thread.id)}
                 />
                 <button
-                  onClick={() => setOpenComments(openComments === post.id ? null : post.id)}
+                  onClick={() => setOpenComments(openComments === thread.id ? null : thread.id)}
                   className="flex items-center gap-1 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition"
                 >
                   <MessageCircle className="w-5 h-5" />
-                  <span>{post.comments.length}</span>
+                  <span>{thread.comments.length}</span>
                 </button>
               </div>
 
-              {openComments === post.id && (
+              {openComments === thread.id && (
                 <CommentSection
-                  postId={post.id}
-                  comments={post.comments.map((c: any) => ({
+                  threadId={thread.id}
+                  comments={thread.comments.map((c: any) => ({
                     id: c.id,
                     author: c.user.email,
                     content: c.content,
@@ -115,7 +115,7 @@ const Home = () => {
             Post your post
           </Button>
         </div>
-        <CreatePost open={modalOpen} onClose={() => setModalOpen(false)} refetchPosts={refetch} />
+        <CreateThreadModal open={modalOpen} onClose={() => setModalOpen(false)} refetchThreads={refetch} />
       </div>
     </Layout>
   );

@@ -9,16 +9,16 @@ interface Comment {
 }
 
 interface CommentSectionProps {
-  postId: string;
+  threadId: string;
   comments: Comment[];
-  onAddComment: (postId: string, content: string) => void;
+  onAddComment: (threadId: string, content: string) => void;
 }
 
-const CommentSection = ({ postId, comments, onAddComment }: CommentSectionProps) => {
+const CommentSection = ({ threadId, comments, onAddComment }: CommentSectionProps) => {
   const [commentText, setCommentText] = useState("");
 
   const handleSend = () => {
-    onAddComment(postId, commentText);
+    onAddComment(threadId, commentText);
     setCommentText("");
   };
 

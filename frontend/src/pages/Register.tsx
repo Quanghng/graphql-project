@@ -4,34 +4,25 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/Layout";
 import { gql, useMutation } from "@apollo/client";
-
-const REGISTER_MUTATION = gql`
-  mutation Register($email: String!, $password: String!) {
-    register(email: $email, password: $password) {
-      accessToken
-      refreshToken
-    }
-  }
-`;
+import { registerUser } from "@/lib/api/auth"
 
 const Register = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [register, { loading, error }] = useMutation(REGISTER_MUTATION);
+  const [error, setError] = useState("");
 
   const handleRegister = async () => {
     try {
-      const { data } = await register({ variables: { email, password } });
-
-      if (data?.register?.accessToken) {
-        localStorage.setItem("accessToken", data.register.accessToken);
-        localStorage.setItem("refreshToken", data.register.refreshToken);
+      const data = await registerUser(email, password);
+      if (data?.accessToken) {
+        localStorage.setItem("accessToken", data.accessToken);
+        localStorage.setItem("refreshToken", data.refreshToken);
         localStorage.setItem("isLoggedIn", "true");
         navigate("/");
       }
-    } catch (err) {
-      console.error("Registration failed", err);
+    } catch (err: any) {
+      setError(err.response?.data?.message || "Registration failed");
     }
   };
 
@@ -57,13 +48,12 @@ const Register = () => {
             onChange={(e) => setPassword(e.target.value)}
             className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-gray-600"
           />
-          {error && <p className="text-red-500 text-sm">Registration error: {error.message}</p>}
+          {error && <p className="text-red-500 text-sm">Registration error: {error}</p>}
           <Button
             onClick={handleRegister}
-            disabled={loading}
             className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white"
           >
-            {loading ? "Registering..." : "Register"}
+            Register
           </Button>
         </div>
       </div>

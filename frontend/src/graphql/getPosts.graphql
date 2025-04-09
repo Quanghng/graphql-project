@@ -1,5 +1,5 @@
-query GetPosts {
-  posts {
+query GetThreads {
+  threads {
     id
     title
     content

@@ -4,33 +4,25 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/Layout";
 import { gql, useMutation } from "@apollo/client";
-
-const LOGIN_MUTATION = gql`
-  mutation Login($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
-      accessToken
-      refreshToken
-    }
-  }
-`;
+import { loginUser } from "@/lib/api/auth";
 
 const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [login, { loading, error }] = useMutation(LOGIN_MUTATION);
+  const [error, setError] = useState("");
 
   const handleLogin = async () => {
     try {
-      const { data } = await login({ variables: { email, password } });
-      if (data?.login?.accessToken) {
-        localStorage.setItem("accessToken", data.login.accessToken);
-        localStorage.setItem("refreshToken", data.login.refreshToken);
+      const data = await loginUser(email, password);
+      if (data?.accessToken) {
+        localStorage.setItem("accessToken", data.accessToken);
+        localStorage.setItem("refreshToken", data.refreshToken);
         localStorage.setItem("isLoggedIn", "true");
         navigate("/");
       }
-    } catch (err) {
-      console.error("Login failed", err);
+    } catch (err: any) {
+      setError(err.response?.data?.message || "Login failed");
     }
   };
 
@@ -57,13 +49,12 @@ const Login = () => {
             onChange={(e) => setPassword(e.target.value)}
             className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-gray-600"
           />
-          {error && <p className="text-red-500 text-sm">Login error: {error.message}</p>}
+          {error && <p className="text-red-500 text-sm">Login error: {error}</p>}
           <Button
             onClick={handleLogin}
-            disabled={loading}
             className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white"
           >
-            {loading ? "Logging in..." : "Login"}
+            Login
           </Button>
 
           <p className="text-sm text-center text-gray-600 dark:text-gray-300 mt-4">

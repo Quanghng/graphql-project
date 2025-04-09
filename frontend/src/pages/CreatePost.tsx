@@ -10,9 +10,9 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { gql, useMutation } from "@apollo/client";
 
-const CREATE_POST = gql`
-  mutation CreatePost($title: String!, $content: String!) {
-    createPost(title: $title, content: $content) {
+const CREATE_THREAD = gql`
+  mutation CreateThread($title: String!, $content: String!) {
+    createThread(title: $title, content: $content) {
       id
       title
       content
@@ -21,23 +21,23 @@ const CREATE_POST = gql`
   }
 `;
 
-interface CreatePostModalProps {
+interface CreateThreadModalProps {
   open: boolean;
   onClose: () => void;
-  refetchPosts?: () => void;
+  refetchThreads?: () => void;
 }
 
-const CreatePostModal = ({ open, onClose, refetchPosts }: CreatePostModalProps) => {
+const CreateThreadModal = ({ open, onClose, refetchThreads }: CreateThreadModalProps) => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [image, setImage] = useState<File | null>(null);
-  const [createPost, { loading }] = useMutation(CREATE_POST);
+  const [createThread, { loading }] = useMutation(CREATE_THREAD);
 
   const handleSubmit = async () => {
     if (!title || !content) return;
     try {
-      await createPost({ variables: { title, content } });
-      if (refetchPosts) await refetchPosts();
+      await createThread({ variables: { title, content } });
+      if (refetchThreads) await refetchThreads();
       setTitle("");
       setContent("");
       setImage(null);
@@ -96,4 +96,4 @@ const CreatePostModal = ({ open, onClose, refetchPosts }: CreatePostModalProps) 
   );
 };
 
-export default CreatePostModal;
+export default CreateThreadModal;
