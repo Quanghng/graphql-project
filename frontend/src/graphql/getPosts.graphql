@@ -1,0 +1,18 @@
+query GetPosts {
+  posts {
+    id
+    title
+    content
+    likes
+    user {
+      email
+    }
+    comments {
+      id
+      content
+      user {
+        email
+      }
+    }
+  }
+}

@@ -9,111 +9,115 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-
-const mockArticles = [
-  {
-    id: "1",
-    title: "Test Article 1",
-    content: "This is a placeholder content for the article.",
-    likes: 10,
-    author: { name: "Alice" },
-  },
-  {
-    id: "2",
-    title: "Test Article 2",
-    content: "Another test article.",
-    likes: 5,
-    author: { name: "Bob" },
-  },
-];
+import LikeButton from "@/components/LikeButton";
+import CreatePost from "./CreatePost";
+import { MessageCircle } from "lucide-react";
+import CommentSection from "@/components/CommentSection";
+import Layout from "@/components/Layout";
+import { useGetPostsQuery } from '@/gql/generated';
 
 const Home = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [openComments, setOpenComments] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const loginState = localStorage.getItem("isLoggedIn") === "true";
-    setIsLoggedIn(loginState);
-  }, []);
+  const { data, loading, error, refetch } = useGetPostsQuery();
 
-  const handlePost = () => {
-    if (isLoggedIn) {
-      alert("Post published successfully!");
-    } else {
-      navigate("/login");
-    }
+  const handleLike = (postId: string) => {
+    console.log("Like clicked for post", postId);
+    // Optional: Add mutation for like
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("isLoggedIn");
-    setIsLoggedIn(false);
+  const handleAddComment = (postId: string, content: string) => {
+    console.log("Comment added:", content);
+    // Optional: Add mutation for comment
   };
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error loading posts</p>;
 
   return (
-    <div className="p-6 max-w-4xl mx-auto bg-white rounded-xl shadow-sm">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold text-gray-800">Recent Posts</h1>
-        <div className="flex gap-2">
-          {isLoggedIn ? (
-            <>
-              <Button
-                onClick={handleLogout}
-                variant="outline"
-              >
-                Logout
-              </Button>
-            </>
-          ) : (
-            <>
-              <Link to="/login">
-                <Button variant="outline">Login</Button>
-              </Link>
-              <Link to="/register">
-                <Button variant="outline">Register</Button>
-              </Link>
-            </>
-          )}
+    <Layout>
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100 rounded-xl shadow-sm transition-colors">
+        <h1 className="text-4xl font-extrabold text-blue-700 dark:text-blue-400 tracking-tight mb-8 text-center">
+          Recent Posts
+        </h1>
+        <div className="flex gap-2 mb-6">
+          <Input
+            placeholder="Search posts..."
+            className="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-gray-100"
+          />
+          <Button className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-6 py-2 rounded-full shadow hover:shadow-lg transition">
+            🔍 Search
+          </Button>
         </div>
-      </div>
 
-      <div className="mb-6">
-        <Input placeholder="Search articles..." className="w-full" />
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {mockArticles.map((article) => (
-          <Link to={`/article/${article.id}`} key={article.id}>
-            <Card className="hover:shadow-lg transition duration-200">
-              <CardHeader>
-                <CardTitle>{article.title}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription>
-                  {article.content.substring(0, 100)}...
-                </CardDescription>
-                <p className="text-sm text-muted-foreground mt-2">
-                  by {article.author.name}
-                </p>
-              </CardContent>
-              <div className="p-4 pt-0 text-right text-sm">
-                👍 {article.likes} Likes
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {data?.posts?.map((post: any) => (
+            <Card
+              key={post.id}
+              className="hover:shadow-md transition duration-200 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+            >
+              <Link to={`/post/${post.id}`}>
+                <CardHeader>
+                  <CardTitle>{post.title}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription>
+                    {post.content.substring(0, 100)}...
+                  </CardDescription>
+                  <p className="text-sm text-muted-foreground mt-2 text-gray-600 dark:text-gray-300">
+                    by {post.user.email}
+                  </p>
+                </CardContent>
+              </Link>
+              <div className="flex items-center justify-end gap-4 px-4 pb-4">
+                <LikeButton
+                  liked={false}
+                  likesCount={post.likes}
+                  onClick={() => handleLike(post.id)}
+                />
+                <button
+                  onClick={() => setOpenComments(openComments === post.id ? null : post.id)}
+                  className="flex items-center gap-1 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition"
+                >
+                  <MessageCircle className="w-5 h-5" />
+                  <span>{post.comments.length}</span>
+                </button>
               </div>
-            </Card>
-          </Link>
-        ))}
-      </div>
 
-      <div className="mt-12 text-center border-t pt-8">
-        <h2 className="text-2xl font-semibold mb-4">🖊️ Ready to share your thoughts?</h2>
-        <p className="text-gray-600 mb-6">Join the conversation and publish your first article.</p>
-        <Button
-          onClick={handlePost}
-          className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-6 py-3 text-lg rounded-full shadow hover:shadow-xl transition"
-        >
-          ✍️ Post your article
-        </Button>
+              {openComments === post.id && (
+                <CommentSection
+                  postId={post.id}
+                  comments={post.comments.map((c: any) => ({
+                    id: c.id,
+                    author: c.user.email,
+                    content: c.content,
+                  }))}
+                  onAddComment={handleAddComment}
+                />
+              )}
+            </Card>
+          ))}
+        </div>
+
+        <div className="mt-12 text-center pt-8">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-800 dark:text-gray-100">
+            Ready to share your thoughts?
+          </h2>
+          <p className="text-gray-600 dark:text-gray-400 mb-6">
+            Join the conversation and publish your first post.
+          </p>
+          <Button
+            onClick={() => setModalOpen(true)}
+            className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-6 py-3 text-lg rounded-full shadow hover:shadow-xl transition"
+          >
+            Post your post
+          </Button>
+        </div>
+        <CreatePost open={modalOpen} onClose={() => setModalOpen(false)} refetchPosts={refetch} />
       </div>
-    </div>
+    </Layout>
   );
 };
 

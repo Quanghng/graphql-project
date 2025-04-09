@@ -1,15 +1,28 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
-import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
+import { ApolloClient, InMemoryCache, ApolloProvider, createHttpLink } from "@apollo/client";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Home from "./pages/Home";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
 import "./index.css"; 
+import { setContext } from "@apollo/client/link/context";
 
-const client = new ApolloClient({
-  uri: "http://localhost:4000/graphql",
+const httpLink = createHttpLink({
+  uri: "http://localhost:3333/graphql",
+  credentials: "include", 
+});
+
+const authLink = setContext((_, { headers }) => {
+  const token = localStorage.getItem("accessToken");
+  return {
+    headers: {
+      ...headers,
+      Authorization: token ? `Bearer ${token}` : "",
+    },
+  };
+});
+
+export const client = new ApolloClient({
+  link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
 });
 
