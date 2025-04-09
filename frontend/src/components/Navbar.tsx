@@ -49,14 +49,14 @@ const Navbar = () => {
           {isLoggedIn ? (
             <>
               <NavLink
-                to="/myposts"
+                to="/mythreads"
                 className={({ isActive }) =>
                   isActive
                     ? "text-blue-600 dark:text-blue-400 font-semibold"
                     : "text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition"
                 }
               >
-                My Posts
+                My Threads
               </NavLink>
               <button
                 onClick={handleLogout}

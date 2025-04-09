@@ -13,19 +13,13 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-      const data = await loginUser(email, password);
-      if (data?.accessToken) {
-        console.log("Login successful", data);
-        localStorage.setItem("accessToken", data.accessToken);
-        localStorage.setItem("refreshToken", data.refreshToken);
-        localStorage.setItem("isLoggedIn", "true");
-        navigate("/");
-      }
+      await loginUser(email, password); 
+      navigate("/");
     } catch (err: any) {
       setError(err.response?.data?.message || "Login failed");
     }
   };
-
+  
   return (
     <Layout>
       <div className="max-w-md mx-auto px-4 sm:px-6 lg:px-8 py-10 

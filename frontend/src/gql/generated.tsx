@@ -98,7 +98,6 @@ export type Thread = {
   comments?: Maybe<Array<Comment>>;
   content: Scalars['String']['output'];
   createdAt: Scalars['DateTime']['output'];
-  getComments: Array<Comment>;
   id: Scalars['Int']['output'];
   likes: Scalars['Int']['output'];
   title: Scalars['String']['output'];
@@ -127,6 +126,13 @@ export type GetThreadsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetThreadsQuery = { __typename?: 'Query', getThreads: Array<{ __typename?: 'Thread', id: number, title: string, content: string, likes: number, user: { __typename?: 'User', email: string }, comments?: Array<{ __typename?: 'Comment', id: number, content: string, user: { __typename?: 'User', email: string } }> | null }> };
+
+export type GetUserWithThreadsQueryVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+
+export type GetUserWithThreadsQuery = { __typename?: 'Query', getUser: { __typename?: 'User', id: number, email: string, firstName?: string | null, lastName?: string | null, getThreads: Array<{ __typename?: 'Thread', id: number, title: string, content: string, likes: number, comments?: Array<{ __typename?: 'Comment', id: number, content: string, user: { __typename?: 'User', email: string } }> | null }> } };
 
 
 export const GetThreadsDocument = gql`
@@ -181,3 +187,59 @@ export type GetThreadsQueryHookResult = ReturnType<typeof useGetThreadsQuery>;
 export type GetThreadsLazyQueryHookResult = ReturnType<typeof useGetThreadsLazyQuery>;
 export type GetThreadsSuspenseQueryHookResult = ReturnType<typeof useGetThreadsSuspenseQuery>;
 export type GetThreadsQueryResult = Apollo.QueryResult<GetThreadsQuery, GetThreadsQueryVariables>;
+export const GetUserWithThreadsDocument = gql`
+    query GetUserWithThreads($id: Int!) {
+  getUser(id: $id) {
+    id
+    email
+    firstName
+    lastName
+    getThreads {
+      id
+      title
+      content
+      likes
+      comments {
+        id
+        content
+        user {
+          email
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetUserWithThreadsQuery__
+ *
+ * To run a query within a React component, call `useGetUserWithThreadsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserWithThreadsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserWithThreadsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetUserWithThreadsQuery(baseOptions: Apollo.QueryHookOptions<GetUserWithThreadsQuery, GetUserWithThreadsQueryVariables> & ({ variables: GetUserWithThreadsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserWithThreadsQuery, GetUserWithThreadsQueryVariables>(GetUserWithThreadsDocument, options);
+      }
+export function useGetUserWithThreadsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserWithThreadsQuery, GetUserWithThreadsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserWithThreadsQuery, GetUserWithThreadsQueryVariables>(GetUserWithThreadsDocument, options);
+        }
+export function useGetUserWithThreadsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetUserWithThreadsQuery, GetUserWithThreadsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetUserWithThreadsQuery, GetUserWithThreadsQueryVariables>(GetUserWithThreadsDocument, options);
+        }
+export type GetUserWithThreadsQueryHookResult = ReturnType<typeof useGetUserWithThreadsQuery>;
+export type GetUserWithThreadsLazyQueryHookResult = ReturnType<typeof useGetUserWithThreadsLazyQuery>;
+export type GetUserWithThreadsSuspenseQueryHookResult = ReturnType<typeof useGetUserWithThreadsSuspenseQuery>;
+export type GetUserWithThreadsQueryResult = Apollo.QueryResult<GetUserWithThreadsQuery, GetUserWithThreadsQueryVariables>;

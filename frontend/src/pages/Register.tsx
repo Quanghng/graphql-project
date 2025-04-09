@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/Layout";
-import { gql, useMutation } from "@apollo/client";
 import { registerUser } from "@/lib/api/auth"
 
 const Register = () => {
@@ -19,7 +18,7 @@ const Register = () => {
         localStorage.setItem("accessToken", data.accessToken);
         localStorage.setItem("refreshToken", data.refreshToken);
         localStorage.setItem("isLoggedIn", "true");
-        navigate("/");
+        navigate("/login");
       }
     } catch (err: any) {
       setError(err.response?.data?.message || "Registration failed");
