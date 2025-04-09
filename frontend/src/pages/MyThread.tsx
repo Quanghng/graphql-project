@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/card";
 
 const MyThreads = () => {
-  const userId = Number(localStorage.getItem("userId")); // 确保登录时保存了 userId
+  const userId = Number(localStorage.getItem("userId")); 
   const { data, loading, error, refetch } = useGetUserWithThreadsQuery({
     variables: { id: userId },
   });
@@ -39,7 +39,6 @@ const MyThreads = () => {
   return (
     <Layout>
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100 rounded-xl shadow-sm transition-colors mt-10">
-        {/* 用户信息 */}
         <div className="mb-10 border-b border-gray-300 dark:border-gray-700 pb-6">
           <h2 className="text-3xl font-bold mb-2 text-blue-700 dark:text-blue-300">👤 My Profile</h2>
           <p><strong>Email:</strong> {user?.email}</p>
@@ -47,7 +46,6 @@ const MyThreads = () => {
           <p><strong>Last Name:</strong> {user?.lastName || "—"}</p>
         </div>
 
-        {/* 帖子列表 */}
         <h2 className="text-3xl font-extrabold mb-6 text-indigo-700 dark:text-indigo-300">🧵 My Threads</h2>
         {user?.getThreads?.length === 0 ? (
           <p className="text-gray-500">You haven’t posted anything yet.</p>
