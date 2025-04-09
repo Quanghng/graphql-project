@@ -30,7 +30,7 @@ async function bootstrap() {
 
   // Middlewares
   app.use(cookieParser(process.env.COOKIE_SECRET));
-  app.use(helmet())
+  app.use(helmet({ contentSecurityPolicy: (process.env.NODE_ENV === 'production') ? undefined : false }));
 
   // Enable CORS 
   app.enableCors({

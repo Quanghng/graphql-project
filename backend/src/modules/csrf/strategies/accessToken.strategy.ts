@@ -26,7 +26,6 @@ export class AccessTokenStrategy extends PassportStrategy(Strategy, 'jwt') {
         ExtractJwt.fromAuthHeaderAsBearerToken()
       ])
     }
-
     super({
       jwtFromRequest: extratedJWT,
       secretOrKey: process.env.JWT_ACCESS_TOKEN_SECRET as string,
