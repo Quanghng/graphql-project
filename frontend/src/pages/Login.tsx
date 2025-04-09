@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "react-router-dom";
+import axios, { AxiosError } from "axios";
 
 const Login = () => {
   const [values, setValues] = useState({ email: "", password: "" });
@@ -12,9 +13,32 @@ const Login = () => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Login with:", values);
+
+    axios.defaults.withCredentials = true;
+    try {
+      const signupRes = await axios.post(
+        // Endpoint
+        "http://localhost:3333/api/v1/auth/signin",
+        // Data
+        {
+          email: values.email,
+          password: values.password,
+        },
+      );
+
+      const { tokens } = signupRes.data;
+      document.cookie = `jwt=${tokens}; path=/;`;
+      console.log("Login successful:", signupRes.data);
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      console.error(
+        "Something failed:",
+        axiosError.response?.data || axiosError.message
+      );
+    }
   };
 
   return (

@@ -24,6 +24,15 @@ export class CsrfService {
     const csrf = {
       token: this.csrfProtection.generateToken(req, res),
     }
+
+    // Set the CSRF cookie in the response
+    const cookieName = this.config.get<string>("CSRF_COOKIE_NAME") || "default_csrf_cookie_name";
+    res.cookie(cookieName, csrf.token, {
+      httpOnly: true, // For security
+      secure: process.env.NODE_ENV === "production", // Set to true for HTTPS
+      sameSite: "none", // You can use Lax or None based on your needs
+      path: "/", // Make sure the cookie is available to all routes
+    });
     return csrf;
   }
 }

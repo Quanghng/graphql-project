@@ -22,13 +22,13 @@ export class AuthController {
   ) {
   }
 
-  @UseGuards(CsrfGuard)
+  // @UseGuards(CsrfGuard)
   @Post("signup")
   signUp(@Body() dto: AuthDto, @Res({ passthrough: true }) res: Response) {
     return this.authService.signUp(dto, res);
   }
 
-  @UseGuards(CsrfGuard)
+  // @UseGuards(CsrfGuard)
   @Post("signin")
   signIn(@Body() dto: AuthDto, @Res({ passthrough: true }) res: Response) {
     return this.authService.signIn(dto, res);
