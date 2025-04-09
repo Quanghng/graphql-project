@@ -5,10 +5,18 @@ import { PostThreadDto } from "./dto/post-thread.dto";
 import { ModifyThreadDto } from "./dto/modify-thread.dto";
 import { CommentLoader } from "../comment/loaders/comment.loader";
 import { Comment } from "../comment/models/comment.model";
+import { User } from "../user/models/user.model";
+import { forwardRef, Inject } from "@nestjs/common";
+import { UserService } from "../user/user.service";
 
 @Resolver(() => Thread)
 export class ThreadResolver {
-  constructor(private threadService: ThreadService, private readonly commentLoader: CommentLoader) { }
+  constructor(
+    private threadService: ThreadService,
+    private readonly commentLoader: CommentLoader,
+    @Inject(forwardRef(() => UserService))
+    private readonly userService: UserService
+  ) { }
 
   @Query(() => [Thread])
   async getThreads(): Promise<Thread[]> {
@@ -34,6 +42,11 @@ export class ThreadResolver {
     @Args('threadId') threadId: number,
   ): Promise<Thread> {
     return this.threadService.deleteThread(threadId)
+  }
+
+  @ResolveField(() => User)
+  async user(@Parent() thread: Thread): Promise<User> {
+    return this.userService.getUserById(thread.userId);
   }
 
   @ResolveField(() => [Comment])

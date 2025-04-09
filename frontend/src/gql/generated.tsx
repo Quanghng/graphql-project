@@ -30,14 +30,44 @@ export type Comment = {
   userId: Scalars['Int']['output'];
 };
 
+export type ModifyThreadDto = {
+  content: Scalars['String']['input'];
+  threadId: Scalars['Int']['input'];
+  title: Scalars['String']['input'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
+  deleteThread: Thread;
+  modifyThread: Thread;
+  postComment: Comment;
   postThread: Thread;
+};
+
+
+export type MutationDeleteThreadArgs = {
+  threadId: Scalars['Float']['input'];
+};
+
+
+export type MutationModifyThreadArgs = {
+  inputs: ModifyThreadDto;
+};
+
+
+export type MutationPostCommentArgs = {
+  inputs: PostCommentDto;
 };
 
 
 export type MutationPostThreadArgs = {
   inputs: PostThreadDto;
+};
+
+export type PostCommentDto = {
+  content: Scalars['String']['input'];
+  threadId: Scalars['Int']['input'];
+  userId: Scalars['Int']['input'];
 };
 
 export type PostThreadDto = {
@@ -48,8 +78,14 @@ export type PostThreadDto = {
 
 export type Query = {
   __typename?: 'Query';
+  getComments: Array<Comment>;
+  getThreads: Array<Thread>;
   getUser: User;
-  threads: Array<Thread>;
+};
+
+
+export type QueryGetCommentsArgs = {
+  threadId: Scalars['Float']['input'];
 };
 
 
@@ -62,6 +98,7 @@ export type Thread = {
   comments?: Maybe<Array<Comment>>;
   content: Scalars['String']['output'];
   createdAt: Scalars['DateTime']['output'];
+  getComments: Array<Comment>;
   id: Scalars['Int']['output'];
   likes: Scalars['Int']['output'];
   title: Scalars['String']['output'];
@@ -89,12 +126,12 @@ export type User = {
 export type GetThreadsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetThreadsQuery = { __typename?: 'Query', threads: Array<{ __typename?: 'Thread', id: number, title: string, content: string, likes: number, user: { __typename?: 'User', email: string }, comments?: Array<{ __typename?: 'Comment', id: number, content: string, user: { __typename?: 'User', email: string } }> | null }> };
+export type GetThreadsQuery = { __typename?: 'Query', getThreads: Array<{ __typename?: 'Thread', id: number, title: string, content: string, likes: number, user: { __typename?: 'User', email: string }, comments?: Array<{ __typename?: 'Comment', id: number, content: string, user: { __typename?: 'User', email: string } }> | null }> };
 
 
 export const GetThreadsDocument = gql`
     query GetThreads {
-  threads {
+  getThreads {
     id
     title
     content

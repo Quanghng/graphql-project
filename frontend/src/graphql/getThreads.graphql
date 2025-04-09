@@ -1,5 +1,5 @@
 query GetThreads {
-  threads {
+  getThreads {
     id
     title
     content

@@ -17,4 +17,12 @@ export class CommentService {
       },
     });
   }
+
+  async getCommentsByThread(threadId: number): Promise<Comment[]> {
+    // Get comments by thread id
+    return this.prismaService.comment.findMany({
+      where: { threadId },
+      include: { user: true },
+    });
+  }
 }

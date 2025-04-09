@@ -10,6 +10,7 @@ type Comment {
   likes: Int!
   threadId: Int!
   userId: Int!
+  user: User!
 }
 
 """
@@ -26,6 +27,7 @@ type Thread {
   likes: Int!
   comments: [Comment!]
   userId: Int!
+  user: User!
   getComments: [Comment!]!
 }
 
@@ -47,6 +49,7 @@ type User {
 type Query {
   getUser(id: Int!): User!
   getThreads: [Thread!]!
+  getComments(threadId: Float!): [Comment!]!
 }
 
 type Mutation {

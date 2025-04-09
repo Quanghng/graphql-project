@@ -3,7 +3,6 @@ import { useNavigate, Link } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/Layout";
-import { gql, useMutation } from "@apollo/client";
 import { loginUser } from "@/lib/api/auth";
 
 const Login = () => {
@@ -16,6 +15,7 @@ const Login = () => {
     try {
       const data = await loginUser(email, password);
       if (data?.accessToken) {
+        console.log("Login successful", data);
         localStorage.setItem("accessToken", data.accessToken);
         localStorage.setItem("refreshToken", data.refreshToken);
         localStorage.setItem("isLoggedIn", "true");
