@@ -14,35 +14,14 @@ import CreatePost from "./CreatePost";
 import { MessageCircle } from "lucide-react";
 import CommentSection from "@/components/CommentSection";
 import Layout from "@/components/Layout";
-import { useQuery, gql } from "@apollo/client";
-
-const GET_POSTS = gql`
-  query GetPosts {
-  posts {
-    id
-    title
-    content
-    likes
-    user {
-      email
-    }
-    comments {
-      id
-      content
-      user {
-        email
-      }
-    }
-  }
-}
-`;
+import { useGetPostsQuery } from '@/gql/generated';
 
 const Home = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [openComments, setOpenComments] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  const { data, loading, error, refetch } = useQuery(GET_POSTS);
+  const { data, loading, error, refetch } = useGetPostsQuery();
 
   const handleLike = (postId: string) => {
     console.log("Like clicked for post", postId);

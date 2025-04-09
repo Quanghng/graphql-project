@@ -1,13 +1,18 @@
 import { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { Switch } from "@/components/ui/switch";
 
 const Navbar = () => {
   const [darkMode, setDarkMode] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const savedMode = localStorage.getItem("darkMode") === "true";
     setDarkMode(savedMode);
+
+    const loginStatus = localStorage.getItem("isLoggedIn") === "true";
+    setIsLoggedIn(loginStatus);
   }, []);
 
   useEffect(() => {
@@ -19,10 +24,17 @@ const Navbar = () => {
     localStorage.setItem("darkMode", String(darkMode));
   }, [darkMode]);
 
+  const handleLogout = () => {
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    setIsLoggedIn(false);
+    navigate("/login");
+  };
+
   return (
     <nav className="w-full bg-white dark:bg-gray-900 border-b shadow-sm py-3 px-6 mb-6 transition-colors">
       <div className="max-w-5xl mx-auto flex gap-6 items-center justify-between">
-
         <div className="flex gap-6 items-center">
           <NavLink
             to="/"
@@ -34,26 +46,49 @@ const Navbar = () => {
           >
             Home
           </NavLink>
-          <NavLink
-            to="/login"
-            className={({ isActive }) =>
-              isActive
-                ? "text-blue-600 dark:text-blue-400 font-semibold"
-                : "text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition"
-            }
-          >
-            Login
-          </NavLink>
-          <NavLink
-            to="/register"
-            className={({ isActive }) =>
-              isActive
-                ? "text-blue-600 dark:text-blue-400 font-semibold"
-                : "text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition"
-            }
-          >
-            Register
-          </NavLink>
+          {isLoggedIn ? (
+            <>
+              <NavLink
+                to="/myposts"
+                className={({ isActive }) =>
+                  isActive
+                    ? "text-blue-600 dark:text-blue-400 font-semibold"
+                    : "text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition"
+                }
+              >
+                My Posts
+              </NavLink>
+              <button
+                onClick={handleLogout}
+                className="text-gray-600 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-400 transition"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <NavLink
+                to="/login"
+                className={({ isActive }) =>
+                  isActive
+                    ? "text-blue-600 dark:text-blue-400 font-semibold"
+                    : "text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition"
+                }
+              >
+                Login
+              </NavLink>
+              <NavLink
+                to="/register"
+                className={({ isActive }) =>
+                  isActive
+                    ? "text-blue-600 dark:text-blue-400 font-semibold"
+                    : "text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition"
+                }
+              >
+                Register
+              </NavLink>
+            </>
+          )}
         </div>
 
         <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
@@ -70,7 +105,7 @@ const Navbar = () => {
                 data-[state=checked]:after:translate-x-5 
                 after:transition-transform after:duration-300
             `}
-            />
+          />
         </div>
       </div>
     </nav>
