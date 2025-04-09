@@ -28,7 +28,6 @@ type Thread {
   comments: [Comment!]
   userId: Int!
   user: User!
-  getComments: [Comment!]!
 }
 
 """user"""

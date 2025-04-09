@@ -11,13 +11,14 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import LikeButton from "@/components/LikeButton";
 import CreateThreadModal from "./CreatePost";
+import { MessageCircle } from "lucide-react";
 import CommentSection from "@/components/CommentSection";
 import Layout from "@/components/Layout";
 import { useGetThreadsQuery } from "@/gql/generated";
 
 const Home = () => {
   const [modalOpen, setModalOpen] = useState(false);
-  const [openComments] = useState<string | null>(null);
+  const [openComments, setOpenComments] = useState<string | null>(null);
   const navigate = useNavigate();
 
   const { data, loading, error, refetch } = useGetThreadsQuery();
@@ -76,13 +77,13 @@ const Home = () => {
                   likesCount={thread.likes}
                   onClick={() => handleLike(thread.id)}
                 />
-                {/* <button
+                <button
                   onClick={() => setOpenComments(openComments === thread.id ? null : thread.id)}
                   className="flex items-center gap-1 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition"
                 >
                   <MessageCircle className="w-5 h-5" />
                   <span>{thread.comments.length}</span>
-                </button> */}
+                </button>
               </div>
 
               {openComments === thread.id && (

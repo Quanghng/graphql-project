@@ -50,7 +50,7 @@ export class ThreadResolver {
   }
 
   @ResolveField(() => [Comment])
-  async getComments(@Parent() thread: Thread): Promise<Comment[]> {
+  async comments(@Parent() thread: Thread): Promise<Comment[]> {
     return this.commentLoader.batchCommentsByThread.load(thread.id);
   }
 
