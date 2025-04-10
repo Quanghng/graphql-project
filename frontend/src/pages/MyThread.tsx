@@ -234,18 +234,31 @@ const MyThreads: React.FC = () => {
                     </button>
                   </div>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="flex flex-row gap-4">
+                  <div className="flex-1">
                   <Link to={`/thread/${thread.id}`}>
                     <CardDescription>
-                      {thread.content.substring(0, 100)}...
+                    {thread.content.substring(0, 100)}...
                     </CardDescription>
                     <p className="text-sm text-muted-foreground mt-2 text-gray-600 dark:text-gray-300">
-                      by you
+                    by you
                     </p>
                     <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                     at {new Date(thread.createdAt).toLocaleString()}
                     </p>
                   </Link>
+                  </div>
+                  {thread.imageUrl && (
+                  <div className="w-1/2 h-full">
+                    <Link to={`/thread/${thread.id}`}>
+                    <img
+                      src={thread.imageUrl}
+                      alt="Thread Image"
+                      className="w-full h-full object-cover rounded-lg"
+                    />
+                    </Link>
+                  </div>
+                  )}
                 </CardContent>
                 <div className="flex items-center justify-end gap-4 px-4 pb-4">
                   <LikeButton

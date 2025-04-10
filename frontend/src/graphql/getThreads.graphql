@@ -5,6 +5,7 @@ query GetThreads {
     content
     createdAt
     likes
+    imageUrl
     user {
       id
       email

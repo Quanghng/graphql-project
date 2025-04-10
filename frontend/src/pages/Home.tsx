@@ -72,24 +72,35 @@ const Home = () => {
           .map((thread: any) => (
             <Card
               key={thread.id}
-              className="hover:shadow-md transition duration-200 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+              className="flex flex-col bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 hover:shadow-md transition duration-200"
             >
-              <Link to={`/thread/${thread.id}`}>
-                <CardHeader>
+                <div className="flex w-full">
+                <Link to={`/thread/${thread.id}`} className="flex-1">
+                  <CardHeader>
                   <CardTitle>{thread.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription>
-                    {thread.content.substring(0, 100)}
-                  </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                  <CardDescription>{thread.content.substring(0, 100)}</CardDescription>
                   <p className="text-sm text-muted-foreground mt-2 text-gray-600 dark:text-gray-300">
                     by {thread.user.email}
                   </p>
                   <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                     at {new Date(thread.createdAt).toLocaleString()}
                   </p>
-                </CardContent>
-              </Link>
+                  </CardContent>
+                </Link>
+
+                <Link to={`/thread/${thread.id}`} className="w-1/2 h-full gap-4 px-4 pb-4">
+                  {thread.imageUrl && (
+                  <img
+                    src={thread.imageUrl}
+                    alt="Thread Image"
+                    className="w-full h-full object-cover rounded-lg"
+                  />
+                  )}
+                </Link>
+                </div>
+
               <div className="flex items-center justify-end gap-4 px-4 pb-4">
                 <LikeButton
                   liked={getLocalLiked(thread.id)}

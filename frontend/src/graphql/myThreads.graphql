@@ -10,6 +10,7 @@ query GetUserWithThreads($id: Int!) {
       content
       createdAt  
       likes
+      imageUrl
       comments {
         id
         content
