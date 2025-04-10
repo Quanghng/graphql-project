@@ -122,6 +122,13 @@ export type User = {
   updatedAt: Scalars['DateTime']['output'];
 };
 
+export type DeleteThreadMutationVariables = Exact<{
+  id: Scalars['Float']['input'];
+}>;
+
+
+export type DeleteThreadMutation = { __typename?: 'Mutation', deleteThread: { __typename?: 'Thread', id: number } };
+
 export type GetThreadsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -134,7 +141,47 @@ export type GetUserWithThreadsQueryVariables = Exact<{
 
 export type GetUserWithThreadsQuery = { __typename?: 'Query', getUser: { __typename?: 'User', id: number, email: string, firstName?: string | null, lastName?: string | null, getThreads: Array<{ __typename?: 'Thread', id: number, title: string, content: string, likes: number, comments?: Array<{ __typename?: 'Comment', id: number, content: string, user: { __typename?: 'User', email: string } }> | null }> } };
 
+export type ModifyThreadMutationVariables = Exact<{
+  inputs: ModifyThreadDto;
+}>;
 
+
+export type ModifyThreadMutation = { __typename?: 'Mutation', modifyThread: { __typename?: 'Thread', id: number, title: string, content: string } };
+
+
+export const DeleteThreadDocument = gql`
+    mutation DeleteThread($id: Float!) {
+  deleteThread(threadId: $id) {
+    id
+  }
+}
+    `;
+export type DeleteThreadMutationFn = Apollo.MutationFunction<DeleteThreadMutation, DeleteThreadMutationVariables>;
+
+/**
+ * __useDeleteThreadMutation__
+ *
+ * To run a mutation, you first call `useDeleteThreadMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteThreadMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteThreadMutation, { data, loading, error }] = useDeleteThreadMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteThreadMutation(baseOptions?: Apollo.MutationHookOptions<DeleteThreadMutation, DeleteThreadMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteThreadMutation, DeleteThreadMutationVariables>(DeleteThreadDocument, options);
+      }
+export type DeleteThreadMutationHookResult = ReturnType<typeof useDeleteThreadMutation>;
+export type DeleteThreadMutationResult = Apollo.MutationResult<DeleteThreadMutation>;
+export type DeleteThreadMutationOptions = Apollo.BaseMutationOptions<DeleteThreadMutation, DeleteThreadMutationVariables>;
 export const GetThreadsDocument = gql`
     query GetThreads {
   getThreads {
@@ -243,3 +290,38 @@ export type GetUserWithThreadsQueryHookResult = ReturnType<typeof useGetUserWith
 export type GetUserWithThreadsLazyQueryHookResult = ReturnType<typeof useGetUserWithThreadsLazyQuery>;
 export type GetUserWithThreadsSuspenseQueryHookResult = ReturnType<typeof useGetUserWithThreadsSuspenseQuery>;
 export type GetUserWithThreadsQueryResult = Apollo.QueryResult<GetUserWithThreadsQuery, GetUserWithThreadsQueryVariables>;
+export const ModifyThreadDocument = gql`
+    mutation ModifyThread($inputs: ModifyThreadDto!) {
+  modifyThread(inputs: $inputs) {
+    id
+    title
+    content
+  }
+}
+    `;
+export type ModifyThreadMutationFn = Apollo.MutationFunction<ModifyThreadMutation, ModifyThreadMutationVariables>;
+
+/**
+ * __useModifyThreadMutation__
+ *
+ * To run a mutation, you first call `useModifyThreadMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useModifyThreadMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [modifyThreadMutation, { data, loading, error }] = useModifyThreadMutation({
+ *   variables: {
+ *      inputs: // value for 'inputs'
+ *   },
+ * });
+ */
+export function useModifyThreadMutation(baseOptions?: Apollo.MutationHookOptions<ModifyThreadMutation, ModifyThreadMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ModifyThreadMutation, ModifyThreadMutationVariables>(ModifyThreadDocument, options);
+      }
+export type ModifyThreadMutationHookResult = ReturnType<typeof useModifyThreadMutation>;
+export type ModifyThreadMutationResult = Apollo.MutationResult<ModifyThreadMutation>;
+export type ModifyThreadMutationOptions = Apollo.BaseMutationOptions<ModifyThreadMutation, ModifyThreadMutationVariables>;
