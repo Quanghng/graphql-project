@@ -14,7 +14,6 @@ const SingleThread = () => {
   const { threadId } = useParams();
 
   // Local states
-  const [liked, setLiked] = useState(false);   // Liked state for the thread
   const [content, setContent] = useState('');  // Comment content state
 
   // Set up the query hooks
@@ -26,20 +25,16 @@ const SingleThread = () => {
 
 
   // Like/unlike handler
-  useEffect(() => {
-    setLiked(getLocalLiked(Number(threadId))); // Get the initial liked state from local storage
-  }, [threadId]);
-
-  const handleLike = async () => {
-    setLiked(!liked); 
+  const handleLike = async (threadId: number, liked: boolean) => {
     // Update database and local storate
-    await toggleLikeThread(Number(threadId),liked);
+    await toggleLikeThread(threadId, liked);
   };
 
   // Comment handler
   const handleComment = async (e: React.FormEvent) => {
     e.preventDefault();
-    await commentThread(Number(thread?.user?.id), Number(threadId), content);
+    const userId = localStorage.getItem("userId");
+    await commentThread(Number(userId), Number(threadId), content);
     // Optionally clear the content input after posting
     setContent('');
     // Refetch the thread to include the new comment (or update local state)
@@ -67,9 +62,9 @@ const SingleThread = () => {
         )}
 
         <LikeButton
-          liked={liked}
+          liked={getLocalLiked(Number(thread?.id))}
           likesCount={Number(thread?.likes)}
-          onClick={handleLike}
+          onClick={() => handleLike(Number(thread?.id), getLocalLiked(Number(thread?.id)))}
         />
 
         <form onSubmit={handleComment} className="flex gap-2">

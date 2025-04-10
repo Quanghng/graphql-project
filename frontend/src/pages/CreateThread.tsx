@@ -10,7 +10,8 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { usePostThreadMutation } from "@/gql/generated";
 import { uploadImage } from "@/lib/utils";
-
+import { toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 
 
 interface CreateThreadModelProps {
@@ -37,7 +38,10 @@ const CreateThreadModel = ({ open, onClose, refetchThreads }: CreateThreadModelP
     console.log("Image URL:", imageUrl); // Debugging line
 
     const userId = localStorage.getItem("userId") || undefined;
-    if (!userId) throw new Error("User ID not found in local storage.");
+    if (!userId) {
+      toast.info("Please log in or register."); 
+      throw new Error("User ID not found in local storage.");
+    }
 
     await postThread({ variables: { inputs: { userId: Number(userId), title, content, imageUrl } } });
 

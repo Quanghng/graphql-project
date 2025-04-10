@@ -5,6 +5,8 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import SingleThread from "./pages/SingleThread";
 import MyThreads from "./pages/MyThread";
+import { Bounce, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; 
 
 
 function App() {
@@ -28,6 +30,19 @@ function App() {
         <Route path="/mythreads" element={<MyThreads />} />
 
       </Routes>
+      <ToastContainer
+        position="bottom-center"
+        autoClose={1000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+        transition={Bounce}
+      />
     </>
   );
 }

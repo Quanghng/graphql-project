@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   Card,
@@ -21,7 +21,7 @@ const Home = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [openComments, setOpenComments] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const navigate = useNavigate();
+  useNavigate();
 
   // Set up the query hook
   const { data, loading, error, refetch } = useGetThreadsQuery();

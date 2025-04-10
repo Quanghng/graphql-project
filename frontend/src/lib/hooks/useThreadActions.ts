@@ -1,4 +1,6 @@
 import { useLikeThreadMutation, useUnlikeThreadMutation, usePostCommentMutation } from "@/gql/generated";
+import { toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 
 export const useThreadActions = () => {
 
@@ -17,7 +19,10 @@ export const useThreadActions = () => {
 
   const toggleLikeThread = async (threadId: number, liked: boolean) => {
     const userId = localStorage.getItem("userId");
-    if (!userId) return;
+    if (!userId) {
+      toast.info("Please log in or register.");
+      return;
+    }
 
     setLocalLiked(threadId, !liked);
     try {
@@ -32,14 +37,22 @@ export const useThreadActions = () => {
     }
   };
 
-  // Comment handler
+  // Comment handler 
   const commentThread = async (userId: number, threadId: number, content: string) => {
-    if (!content.trim()) return;
+    if (!content.trim()) {
+      toast.info("Please write a comment.");
+      return;
+    }
+    const localUser = localStorage.getItem("userId");
+    if (!localUser) {
+      toast.info("Please log in or register.");
+      return;
+    }
     try {
       await postComment({
         variables: {
           inputs: {
-            userId,
+            userId: Number(localUser),
             threadId,
             content,
           },
