@@ -102,7 +102,7 @@ const MyThreads: React.FC = () => {
      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100 rounded-xl shadow-sm transition-colors">
         <div className="mb-10 border-b border-gray-300 dark:border-gray-700 pb-6">
           <h2 className="text-3xl font-bold mb-2 text-blue-700 dark:text-blue-300">
-            👤 My Profile
+            🧑‍🍳 My Profile
           </h2>
           <div className="space-y-2">
             <p><strong>Email:</strong> {user?.email}</p>
@@ -159,7 +159,7 @@ const MyThreads: React.FC = () => {
         </div>
 
         <h2 className="text-3xl font-extrabold mb-6 text-indigo-700 dark:text-indigo-300">
-          🧵 My Threads
+          🍳 My Threads
         </h2>
         <div className="flex gap-2 mb-6">
             <Input

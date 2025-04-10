@@ -48,7 +48,7 @@ const Home = () => {
     <Layout>
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100 rounded-xl shadow-sm transition-colors">
         <h1 className="text-4xl font-extrabold bg-gradient-to-r from-pink-600 via-purple-500 to-indigo-600 text-transparent bg-clip-text tracking-tight mb-8 text-center">
-          Recent Threads
+          Eatstagram 
         </h1>
         <div className="flex gap-2 mb-6">
           <Input
@@ -135,10 +135,10 @@ const Home = () => {
 
         <div className="mt-12 text-center pt-8">
           <h2 className="text-2xl font-semibold mb-4 text-gray-800 dark:text-gray-100">
-            Ready to share your thoughts?
+            Ready to share your ideas?
           </h2>
           <p className="text-gray-600 dark:text-gray-400 mb-6">
-            Join the conversation and publish your first thread.
+            Join the community and publish your first thread.
           </p>
           <Button
             onClick={() => setModalOpen(true)}
