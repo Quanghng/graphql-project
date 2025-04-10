@@ -10,41 +10,49 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import LikeButton from "@/components/LikeButton";
-import CreateThreadModal from "./CreatePost";
+import CreateThreadModal from "./CreateThread";
 import { MessageCircle } from "lucide-react";
 import CommentSection from "@/components/CommentSection";
 import Layout from "@/components/Layout";
 import { useGetThreadsQuery } from "@/gql/generated";
+import { useThreadActions } from "@/lib/hooks/useThreadActions";
 
 const Home = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [openComments, setOpenComments] = useState<string | null>(null);
   const navigate = useNavigate();
 
+  // Set up the query hook
   const { data, loading, error, refetch } = useGetThreadsQuery();
+  const threads = data?.getThreads;
+  
 
-  const handleLike = (threadId: string) => {
-    console.log("Like clicked for post", threadId);
-    // Optional: Add mutation for like
+  // Set up the thread actions
+  const { getLocalLiked,toggleLikeThread, commentThread } = useThreadActions();
+
+  const handleLike = async (threadId: string, liked: boolean) => {
+    // Update database and local storate
+    await toggleLikeThread(Number(threadId), liked);
   };
 
-  const handleAddComment = (threadId: string, content: string) => {
-    console.log("Comment added:", content);
-    // Optional: Add mutation for comment
+  const handleAddComment = async (userId: string, threadId: string, content: string) => {
+    await commentThread(Number(userId), Number(threadId), content);
+    // Refetch the thread to include the new comment (or update local state)
+    refetch();
   };
 
   if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error loading posts</p>;
+  if (error) return <p>Error loading threads</p>;
 
   return (
     <Layout>
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100 rounded-xl shadow-sm transition-colors">
         <h1 className="text-4xl font-extrabold text-blue-700 dark:text-blue-400 tracking-tight mb-8 text-center">
-          Recent Posts
+          Recent Threads
         </h1>
         <div className="flex gap-2 mb-6">
           <Input
-            placeholder="Search posts..."
+            placeholder="Search threads..."
             className="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-gray-100"
           />
           <Button className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-6 py-2 rounded-full shadow hover:shadow-lg transition">
@@ -53,12 +61,14 @@ const Home = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {data?.getThreads?.map((thread: any) => (
+          {[...(threads ?? [])]
+          .sort((a, b) => a.id - b.id)
+          .map((thread: any) => (
             <Card
               key={thread.id}
               className="hover:shadow-md transition duration-200 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
             >
-              <Link to={`/post/${thread.id}`}>
+              <Link to={`/thread/${thread.id}`}>
                 <CardHeader>
                   <CardTitle>{thread.title}</CardTitle>
                 </CardHeader>
@@ -73,9 +83,9 @@ const Home = () => {
               </Link>
               <div className="flex items-center justify-end gap-4 px-4 pb-4">
                 <LikeButton
-                  liked={false}
+                  liked={getLocalLiked(thread.id)}
                   likesCount={thread.likes}
-                  onClick={() => handleLike(thread.id)}
+                  onClick={() => handleLike(thread.id, getLocalLiked(thread.id))}
                 />
                 <button
                   onClick={() => setOpenComments(openComments === thread.id ? null : thread.id)}
@@ -88,6 +98,7 @@ const Home = () => {
 
               {openComments === thread.id && (
                 <CommentSection
+                  userId={thread.user.id}
                   threadId={thread.id}
                   comments={thread.comments.map((c: any) => ({
                     id: c.id,
@@ -106,13 +117,13 @@ const Home = () => {
             Ready to share your thoughts?
           </h2>
           <p className="text-gray-600 dark:text-gray-400 mb-6">
-            Join the conversation and publish your first post.
+            Join the conversation and publish your first thread.
           </p>
           <Button
             onClick={() => setModalOpen(true)}
             className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-6 py-3 text-lg rounded-full shadow hover:shadow-xl transition"
           >
-            Post your post
+            Post your Thread
           </Button>
         </div>
         <CreateThreadModal open={modalOpen} onClose={() => setModalOpen(false)} refetchThreads={refetch} />

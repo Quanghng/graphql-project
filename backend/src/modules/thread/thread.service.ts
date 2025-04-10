@@ -16,6 +16,20 @@ export class ThreadService {
     });
   }
 
+  async getThreadById(threadId: number): Promise<Thread> {
+    // Check if thread exists
+    const thread = await this.prismaService.thread.findUnique({
+      where: { id: threadId },
+      include: {
+        user: true,
+      },
+    });
+    if (!thread) {
+      throw new Error("Thread not found");
+    }
+    return thread as Thread;
+  }
+
   async getThreadsByUser(userId: number) {
     // Check if user exists 
     const userExists = await this.prismaService.user.findUnique({
@@ -82,6 +96,42 @@ export class ThreadService {
     // Delete thread
     return this.prismaService.thread.delete({
       where: { id: threadId },
+    });
+  }
+
+  async likeThread(threadId: number): Promise<Thread> {
+    // Check if thread exists 
+    const threadExists = await this.prismaService.thread.findUnique({
+      where: { id: threadId },
+    });
+    if (!threadExists) {
+      throw new Error("Thread not found");
+    }
+
+    // Update thread likes
+    return this.prismaService.thread.update({
+      where: { id: threadId },
+      data: {
+        likes: threadExists.likes + 1,
+      },
+    });
+  }
+
+  async unlikeThread(threadId: number): Promise<Thread> {
+    // Check if thread exists 
+    const threadExists = await this.prismaService.thread.findUnique({
+      where: { id: threadId },
+    });
+    if (!threadExists) {
+      throw new Error("Thread not found");
+    }
+
+    // Update thread likes
+    return this.prismaService.thread.update({
+      where: { id: threadId },
+      data: {
+        likes: threadExists.likes - 1,
+      },
     });
   }
 

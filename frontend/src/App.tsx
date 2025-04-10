@@ -3,8 +3,9 @@ import { useEffect } from "react";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import SinglePost from "./pages/SinglePost";
+import SingleThread from "./pages/SingleThread";
 import MyThreads from "./pages/MyThread";
+
 
 function App() {
   
@@ -23,8 +24,9 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/Post/:PostId" element={<SinglePost />} />
+        <Route path="/thread/:threadId" element={<SingleThread />} />
         <Route path="/mythreads" element={<MyThreads />} />
+
       </Routes>
     </>
   );

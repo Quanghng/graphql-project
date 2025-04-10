@@ -43,7 +43,7 @@ const CreateThreadModal = ({ open, onClose, refetchThreads }: CreateThreadModalP
       setImage(null);
       onClose();
     } catch (err) {
-      console.error("Create post failed", err);
+      console.error("Create thread failed", err);
     }
   };
 
@@ -52,7 +52,7 @@ const CreateThreadModal = ({ open, onClose, refetchThreads }: CreateThreadModalP
       <DialogContent className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg rounded-2xl shadow-xl p-6 max-w-md mx-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-blue-700 dark:text-blue-400 text-center mb-4">
-           Create a New Post
+           Create a New Thread
           </DialogTitle>
         </DialogHeader>
 
@@ -64,7 +64,7 @@ const CreateThreadModal = ({ open, onClose, refetchThreads }: CreateThreadModalP
         />
 
         <Textarea
-          placeholder="Write your post here..."
+          placeholder="Write your thread here..."
           value={content}
           onChange={(e) => setContent(e.target.value)}
           className="mb-4 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:outline-none rounded-md"

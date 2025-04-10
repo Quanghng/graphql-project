@@ -1,5 +1,5 @@
-query GetThreads {
-  getThreads {
+query GetThreadById($threadId: Float!) {
+  getThread(threadId: $threadId) {
     id
     title
     content
@@ -8,8 +8,6 @@ query GetThreads {
     user {
       id
       email
-      firstName
-      lastName
     }
     comments {
       id

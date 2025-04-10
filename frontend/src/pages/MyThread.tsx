@@ -9,6 +9,7 @@ import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/com
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useThreadActions } from "@/lib/hooks/useThreadActions";
 
 const MyThreads: React.FC = () => {
   // 1. read userId
@@ -19,7 +20,7 @@ const MyThreads: React.FC = () => {
     variables: { id: userId },
   });
 
-  // 3. Hooks： openComments、deleteId、editThread
+  // 3. Hooks： openComments、deleteId、editThread, threadActions
   const [openComments, setOpenComments] = useState<number | null>(null);
   const [deleteId, setDeleteId] = useState<number | null>(null);
   const [editThread, setEditThread] = useState<{
@@ -27,6 +28,9 @@ const MyThreads: React.FC = () => {
     title: string;
     content: string;
   } | null>(null);
+
+  // Set up the thread actions
+  const { getLocalLiked,toggleLikeThread, commentThread } = useThreadActions();
 
   // 4. useMutation
   const [deleteThreadMutation] = useDeleteThreadMutation();
@@ -44,15 +48,17 @@ const MyThreads: React.FC = () => {
   const user = data?.getUser;
 
   // 7. Like button handler
-  const handleLike = (threadId: number) => {
-    console.log("Liked thread", threadId);
-    // TODO: Add mutation here
+  const handleLike = async (threadId: number, liked: boolean) => {
+    // Update database and local storate
+    await toggleLikeThread(Number(threadId), liked);
+    refetch();
   };
 
   // 8. comment handler
-  const handleAddComment = (threadId: number, content: string) => {
-    console.log("Add comment to thread", threadId, ":", content);
-    // TODO: Add mutation here
+  const handleAddComment = async (userId: number, threadId: number, content: string) => {
+    await commentThread(userId, threadId, content);
+    // Refetch the thread to include the new comment (or update local state)
+    refetch();
   };
 
   return (
@@ -85,7 +91,7 @@ const MyThreads: React.FC = () => {
                 className="relative hover:shadow-md transition duration-200 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
               >
                 <CardHeader className="flex justify-between items-start">
-                  <Link to={`/post/${thread.id}`}>
+                  <Link to={`/thread/${thread.id}`}>
                     <CardTitle>{thread.title}</CardTitle>
                   </Link>
                   <div className="flex gap-2">
@@ -113,7 +119,7 @@ const MyThreads: React.FC = () => {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <Link to={`/post/${thread.id}`}>
+                  <Link to={`/thread/${thread.id}`}>
                     <CardDescription>
                       {thread.content.substring(0, 100)}...
                     </CardDescription>
@@ -124,9 +130,9 @@ const MyThreads: React.FC = () => {
                 </CardContent>
                 <div className="flex items-center justify-end gap-4 px-4 pb-4">
                   <LikeButton
-                    liked={false}
+                    liked={getLocalLiked(thread.id)}
                     likesCount={thread.likes}
-                    onClick={() => handleLike(thread.id)}
+                    onClick={() => handleLike(thread.id, getLocalLiked(thread.id))}
                   />
                   <button
                     onClick={() =>
@@ -141,14 +147,15 @@ const MyThreads: React.FC = () => {
 
                 {openComments === thread.id && (
                   <CommentSection
+                    userId={userId.toString()}
                     threadId={thread.id.toString()}
                     comments={(thread.comments ?? []).map((c) => ({
                       id: c.id.toString(),
                       author: c.user.email,
                       content: c.content,
                     }))}
-                    onAddComment={(threadIdStr, content) =>
-                      handleAddComment(Number(threadIdStr), content)
+                    onAddComment={(userIdStr, threadIdStr, content) =>
+                      handleAddComment(Number(userIdStr) ,Number(threadIdStr), content)
                     }
                   />
                 )}

@@ -9,16 +9,17 @@ interface Comment {
 }
 
 interface CommentSectionProps {
+  userId: string,
   threadId: string;
   comments: Comment[];
-  onAddComment: (threadId: string, content: string) => void;
+  onAddComment: (userId: string, threadId: string, content: string) => void;
 }
 
-const CommentSection = ({ threadId, comments, onAddComment }: CommentSectionProps) => {
+const CommentSection = ({ userId, threadId, comments, onAddComment }: CommentSectionProps) => {
   const [commentText, setCommentText] = useState("");
 
   const handleSend = () => {
-    onAddComment(threadId, commentText);
+    onAddComment(userId, threadId, commentText);
     setCommentText("");
   };
 
@@ -29,6 +30,11 @@ const CommentSection = ({ threadId, comments, onAddComment }: CommentSectionProp
           <Input
             value={commentText}
             onChange={(e) => setCommentText(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                handleSend();
+              }
+            }}
             placeholder="Write a comment..."
             className="flex-grow"
           />
