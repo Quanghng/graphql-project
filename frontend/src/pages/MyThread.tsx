@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { useGetUserWithThreadsQuery, useModifyThreadMutation, useDeleteThreadMutation } from "@/gql/generated";
 import Layout from "@/components/Layout";
 import LikeButton from "@/components/LikeButton";
@@ -13,6 +13,13 @@ import { useThreadActions } from "@/lib/hooks/useThreadActions";
 import CreateThreadModal from "./CreateThread";
 
 const MyThreads: React.FC = () => {
+  const location = useLocation();
+
+  // Refresh the page when navigated to
+  useEffect(() => {
+    refetch();
+  }, [location]);
+
   // 1. read userId
   const userId = Number(localStorage.getItem("userId"));
 

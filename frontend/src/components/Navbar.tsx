@@ -26,6 +26,10 @@ const Navbar = () => {
     localStorage.removeItem("isLoggedIn");
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
+    localStorage.removeItem("userId");
+    Object.keys(localStorage)
+      .filter((key) => key.startsWith("thread-liked-"))
+      .forEach((key) => localStorage.removeItem(key));
     setIsLoggedIn(false);
     navigate("/login");
   };

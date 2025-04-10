@@ -16,6 +16,9 @@ export const useThreadActions = () => {
   };
 
   const toggleLikeThread = async (threadId: number, liked: boolean) => {
+    const userId = localStorage.getItem("userId");
+    if (!userId) return;
+
     setLocalLiked(threadId, !liked);
     try {
       if (liked) {

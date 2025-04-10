@@ -47,7 +47,7 @@ const Home = () => {
   return (
     <Layout>
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100 rounded-xl shadow-sm transition-colors">
-        <h1 className="text-4xl font-extrabold text-blue-700 dark:text-blue-400 tracking-tight mb-8 text-center">
+        <h1 className="text-4xl font-extrabold bg-gradient-to-r from-pink-600 via-purple-500 to-indigo-600 text-transparent bg-clip-text tracking-tight mb-8 text-center">
           Recent Threads
         </h1>
         <div className="flex gap-2 mb-6">
