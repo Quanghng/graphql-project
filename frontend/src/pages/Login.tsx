@@ -40,6 +40,11 @@ const Login = () => {
             type="password"
             placeholder="Password"
             value={password}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                handleLogin();
+              }
+            }}
             onChange={(e) => setPassword(e.target.value)}
             className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-gray-600"
           />
