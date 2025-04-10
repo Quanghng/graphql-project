@@ -5,10 +5,22 @@ import { Switch } from "@/components/ui/switch";
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
+  const [userInfo, setUserInfo] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+  });
 
   useEffect(() => {
     const loginStatus = localStorage.getItem("isLoggedIn") === "true";
     setIsLoggedIn(loginStatus);
+    if (loginStatus) {
+      setUserInfo({
+        firstName: localStorage.getItem("firstName") || "",
+        lastName: localStorage.getItem("lastName") || "",
+        email: localStorage.getItem("email") || "",
+      });
+    }
   }, []);
 
   const [darkMode, setDarkMode] = useState(() => localStorage.getItem("darkMode") === "true");
@@ -27,6 +39,9 @@ const Navbar = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     localStorage.removeItem("userId");
+    localStorage.removeItem("firstName");
+    localStorage.removeItem("lastName");
+    localStorage.removeItem("email");
     Object.keys(localStorage)
       .filter((key) => key.startsWith("thread-liked-"))
       .forEach((key) => localStorage.removeItem(key));
@@ -108,6 +123,14 @@ const Navbar = () => {
                 after:transition-transform after:duration-300
             `}
           />
+
+          {isLoggedIn && (
+            <div className="flex items-center gap-2 text-xs md:text-sm text-gray-700 dark:text-gray-200">
+              <span>{userInfo.firstName}</span>
+              <span>{userInfo.lastName}</span>
+              <span className="text-gray-500 dark:text-gray-400">{userInfo.email}</span>
+            </div>
+          )}
         </div>
       </div>
     </nav>

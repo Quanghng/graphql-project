@@ -71,6 +71,10 @@ const MyThreads: React.FC = () => {
     refetch();
   };
 
+    // 9. search handler
+  const handleSearchClick = () => {
+  };
+  
   return (
     <Layout>
      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100 rounded-xl shadow-sm transition-colors">
@@ -92,10 +96,17 @@ const MyThreads: React.FC = () => {
             <Input
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
+                onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      handleSearchClick(); 
+                    }
+                  }}
                 placeholder="Search your threads..."
                 className="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-gray-100"
             />
-            <Button className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-6 py-2 rounded-full shadow hover:shadow-lg transition">
+            <Button 
+            onClick={handleSearchClick}
+            className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-6 py-2 rounded-full shadow hover:shadow-lg transition">
                 🔍 Search
             </Button>
         </div>
