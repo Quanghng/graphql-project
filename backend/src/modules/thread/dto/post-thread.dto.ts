@@ -1,5 +1,5 @@
 import { InputType, Field, Int } from '@nestjs/graphql'
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator'
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator'
 
 @InputType()
 export class PostThreadDto {
@@ -17,4 +17,9 @@ export class PostThreadDto {
   @IsString()
   @IsNotEmpty()
   content: string
+
+  @Field({ nullable: true })
+  @IsString()
+  @IsOptional()
+  imageUrl?: string
 }

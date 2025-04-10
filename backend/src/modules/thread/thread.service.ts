@@ -61,6 +61,7 @@ export class ThreadService {
         userId: inputs.userId,
         title: inputs.title,
         content: inputs.content,
+        imageUrl: inputs.imageUrl,
       },
     });
   }

@@ -8,40 +8,44 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { gql, useMutation } from "@apollo/client";
+import { usePostThreadMutation } from "@/gql/generated";
+import { uploadImage } from "@/lib/utils";
 
-const CREATE_THREAD = gql`
-  mutation CreateThread($title: String!, $content: String!) {
-    createThread(title: $title, content: $content) {
-      id
-      title
-      content
-      likes
-    }
-  }
-`;
 
-interface CreateThreadModalProps {
+
+interface CreateThreadModelProps {
   open: boolean;
   onClose: () => void;
   refetchThreads?: () => void;
 }
 
-const CreateThreadModal = ({ open, onClose, refetchThreads }: CreateThreadModalProps) => {
+const CreateThreadModel = ({ open, onClose, refetchThreads }: CreateThreadModelProps) => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [image, setImage] = useState<File | null>(null);
-  const [createThread, { loading }] = useMutation(CREATE_THREAD);
+
+  const [postThread, {loading}] = usePostThreadMutation();
 
   const handleSubmit = async () => {
     if (!title || !content) return;
     try {
-      await createThread({ variables: { title, content } });
-      if (refetchThreads) await refetchThreads();
-      setTitle("");
-      setContent("");
-      setImage(null);
-      onClose();
+      let imageUrl: string | undefined;
+    if (image) {
+      imageUrl = await uploadImage(image);
+    }
+
+    console.log("Image URL:", imageUrl); // Debugging line
+
+    const userId = localStorage.getItem("userId") || undefined;
+    if (!userId) throw new Error("User ID not found in local storage.");
+
+    await postThread({ variables: { inputs: { userId: Number(userId), title, content, imageUrl } } });
+
+    if (refetchThreads) await refetchThreads();
+    setTitle("");
+    setContent("");
+    setImage(null);
+    onClose();
     } catch (err) {
       console.error("Create thread failed", err);
     }
@@ -96,4 +100,4 @@ const CreateThreadModal = ({ open, onClose, refetchThreads }: CreateThreadModalP
   );
 };
 
-export default CreateThreadModal;
+export default CreateThreadModel;

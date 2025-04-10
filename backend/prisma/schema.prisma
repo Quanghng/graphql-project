@@ -37,6 +37,7 @@ model Thread {
   content String
   likes Int @default(0)
   comments Comment[]
+  imageUrl String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId Int

@@ -52,7 +52,20 @@ const SingleThread = () => {
   return (
     <Layout>
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 rounded-xl shadow-md mt-10 space-y-6">
+      <div className="text-3xl font-semibold bg-gradient-to-r from-pink-600 via-purple-500 to-indigo-600 text-transparent bg-clip-text">
+        {thread?.title}
+      </div>
       <div className="text-xl font-semibold">{thread?.content}</div>
+        {thread?.imageUrl && (
+          <div className="mt-4">
+            <img
+              src={thread.imageUrl}
+              alt="Thread Image"
+              className="w-full rounded-lg"
+            />
+          </div>
+        )}
+
         <LikeButton
           liked={liked}
           likesCount={Number(thread?.likes)}

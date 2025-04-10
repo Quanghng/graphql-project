@@ -52,4 +52,10 @@ export class Thread {
   @IsNumber()
   @IsNotEmpty()
   userId: number;
+
+  @Field(type => String, { nullable: true })
+  @ApiPropertyOptional({ type: String, description: "Thread image URL" })
+  @IsOptional()
+  @IsString()
+  imageUrl?: string | null;
 }

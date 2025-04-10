@@ -10,7 +10,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import LikeButton from "@/components/LikeButton";
-import CreateThreadModal from "./CreateThread";
+import CreateThreadModel from "./CreateThread";
 import { MessageCircle } from "lucide-react";
 import CommentSection from "@/components/CommentSection";
 import Layout from "@/components/Layout";
@@ -74,7 +74,7 @@ const Home = () => {
                 </CardHeader>
                 <CardContent>
                   <CardDescription>
-                    {thread.content.substring(0, 100)}...
+                    {thread.content.substring(0, 100)}
                   </CardDescription>
                   <p className="text-sm text-muted-foreground mt-2 text-gray-600 dark:text-gray-300">
                     by {thread.user.email}
@@ -126,7 +126,7 @@ const Home = () => {
             Post your Thread
           </Button>
         </div>
-        <CreateThreadModal open={modalOpen} onClose={() => setModalOpen(false)} refetchThreads={refetch} />
+        <CreateThreadModel open={modalOpen} onClose={() => setModalOpen(false)} refetchThreads={refetch} />
       </div>
     </Layout>
   );
