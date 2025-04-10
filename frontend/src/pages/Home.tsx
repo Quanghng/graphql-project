@@ -20,13 +20,13 @@ import { useThreadActions } from "@/lib/hooks/useThreadActions";
 const Home = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [openComments, setOpenComments] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 
   // Set up the query hook
   const { data, loading, error, refetch } = useGetThreadsQuery();
   const threads = data?.getThreads;
   
-
   // Set up the thread actions
   const { getLocalLiked,toggleLikeThread, commentThread } = useThreadActions();
 
@@ -52,6 +52,8 @@ const Home = () => {
         </h1>
         <div className="flex gap-2 mb-6">
           <Input
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search threads..."
             className="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-gray-100"
           />
@@ -62,6 +64,10 @@ const Home = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {[...(threads ?? [])]
+          .filter(thread =>
+            thread.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            thread.content.toLowerCase().includes(searchTerm.toLowerCase())
+          )
           .sort((a, b) => a.id - b.id)
           .map((thread: any) => (
             <Card

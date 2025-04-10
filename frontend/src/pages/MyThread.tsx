@@ -10,6 +10,7 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useThreadActions } from "@/lib/hooks/useThreadActions";
+import CreateThreadModal from "./CreateThread";
 
 const MyThreads: React.FC = () => {
   // 1. read userId
@@ -20,7 +21,8 @@ const MyThreads: React.FC = () => {
     variables: { id: userId },
   });
 
-  // 3. Hooks： openComments、deleteId、editThread, threadActions
+  // 3. Hooks： openComments、searchTerm,deleteId、editThread, threadActions, searchTerm
+  const [modalOpen, setModalOpen] = useState(false);
   const [openComments, setOpenComments] = useState<number | null>(null);
   const [deleteId, setDeleteId] = useState<number | null>(null);
   const [editThread, setEditThread] = useState<{
@@ -28,6 +30,7 @@ const MyThreads: React.FC = () => {
     title: string;
     content: string;
   } | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
   // Set up the thread actions
   const { getLocalLiked,toggleLikeThread, commentThread } = useThreadActions();
@@ -78,12 +81,38 @@ const MyThreads: React.FC = () => {
         <h2 className="text-3xl font-extrabold mb-6 text-indigo-700 dark:text-indigo-300">
           🧵 My Threads
         </h2>
-
+        <div className="flex gap-2 mb-6">
+            <Input
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Search your threads..."
+                className="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-gray-100"
+            />
+            <Button className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-6 py-2 rounded-full shadow hover:shadow-lg transition">
+                🔍 Search
+            </Button>
+        </div>
         {user?.getThreads?.length === 0 ? (
-          <p className="text-gray-500">You haven’t posted anything yet.</p>
+          <Card className="relative hover:shadow-md transition duration-200 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100">
+            <CardHeader className="flex justify-between items-start">
+                <p className="text-gray-500">You haven’t posted anything yet.</p>
+                <Button
+                    onClick={() => setModalOpen(true)}
+                    className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-6 py-3 text-lg rounded-full shadow hover:shadow-xl transition"
+                >
+                    Post your Thread
+                </Button>
+                    <CreateThreadModal open={modalOpen} onClose={() => setModalOpen(false)} refetchThreads={refetch} />
+            </CardHeader>
+        </Card>
+
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {[...(user?.getThreads ?? [])]
+            .filter((thread) =>
+                thread.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                thread.content.toLowerCase().includes(searchTerm.toLowerCase())
+              )
             .sort((a, b) => a.id - b.id)
             .map((thread) => (
               <Card
