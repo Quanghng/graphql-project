@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { useGetUserWithThreadsQuery, useModifyThreadMutation, useDeleteThreadMutation } from "@/gql/generated";
+import { useGetUserWithThreadsQuery, useModifyThreadMutation, useDeleteThreadMutation, useModifyUserMutation } from "@/gql/generated";
 import Layout from "@/components/Layout";
 import LikeButton from "@/components/LikeButton";
 import CommentSection from "@/components/CommentSection";
@@ -38,6 +38,10 @@ const MyThreads: React.FC = () => {
     content: string;
   } | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [userFirstName, setUserFirstName] = useState<string>('');
+  const [userLastName, setUserLastName] = useState<string>('');
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
+
 
   // Set up the thread actions
   const { getLocalLiked,toggleLikeThread, commentThread } = useThreadActions();
@@ -45,6 +49,7 @@ const MyThreads: React.FC = () => {
   // 4. useMutation
   const [deleteThreadMutation] = useDeleteThreadMutation();
   const [modifyThreadMutation] = useModifyThreadMutation();
+  const [modifyUserMutation] = useModifyUserMutation()
 
   // 5. error handling
   if (loading) {
@@ -71,8 +76,25 @@ const MyThreads: React.FC = () => {
     refetch();
   };
 
-    // 9. search handler
+  // 9. search handler
   const handleSearchClick = () => {
+  };
+
+  // 10. handle user modify mutation
+  const handleModifyUser = async () => {
+    if (user) {
+      await modifyUserMutation({
+        variables: {
+          inputs: {
+            userId: user.id,
+            firstName: userFirstName,
+            lastName: userLastName,
+          }
+        }
+      });
+      // After modifying user, refetch the user data to reflect changes
+      refetch();
+    }
   };
   
   return (
@@ -82,11 +104,58 @@ const MyThreads: React.FC = () => {
           <h2 className="text-3xl font-bold mb-2 text-blue-700 dark:text-blue-300">
             👤 My Profile
           </h2>
-         <div className="space-y-2">
+          <div className="space-y-2">
             <p><strong>Email:</strong> {user?.email}</p>
-            <p><strong>First Name:</strong> {user?.firstName || "—"}</p>
-            <p><strong>Last Name:</strong> {user?.lastName || "—"}</p>
-         </div>
+
+            {isEditingProfile ? (
+              <>
+                <p><strong>First Name:</strong> 
+                  <Input
+                    value={userFirstName || ""}
+                    onChange={(e) => setUserFirstName(e.target.value)}
+                    className="bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                    placeholder="First Name"
+                  />
+                </p>
+                <p><strong>Last Name:</strong> 
+                  <Input
+                    value={userLastName || ""}
+                    onChange={(e) => setUserLastName(e.target.value)}
+                    className="bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                    placeholder="Last Name"
+                  />
+                </p>
+                <div className="flex gap-4">
+                  <Button
+                    onClick={async () => {
+                      await handleModifyUser();
+                      setIsEditingProfile(false);
+                    }}
+                    className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-6 py-2 rounded-full shadow hover:shadow-lg transition"
+                  >
+                    Save Changes
+                  </Button>
+                  <Button
+                    onClick={() => setIsEditingProfile(false)}
+                    variant="outline"
+                    className="bg-gradient-to-r from-red-500 to-red-600 text-white px-6 py-2 rounded-full shadow hover:shadow-lg transition">
+                    Cancel
+                  </Button>
+                </div>
+              </>
+            ) : (
+              <>
+                <p><strong>First Name:</strong> {user?.firstName}</p>
+                <p><strong>Last Name:</strong> {user?.lastName}</p>
+                <Button
+                  onClick={() => setIsEditingProfile(true)}
+                  className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-6 py-2 rounded-full shadow hover:shadow-lg transition"
+                >
+                  Edit Profile
+                </Button>
+              </>
+            )}
+          </div>
         </div>
 
         <h2 className="text-3xl font-extrabold mb-6 text-indigo-700 dark:text-indigo-300">

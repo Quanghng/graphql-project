@@ -1,4 +1,4 @@
-mutation postThread($inputs: PostThreadDto!) {
+mutation PostThread($inputs: PostThreadDto!) {
   postThread(inputs: $inputs) {
     id
     title

@@ -1,4 +1,4 @@
-mutation likeThread($threadId: Float!) {
+mutation LikeThread($threadId: Float!) {
   likeThread(threadId: $threadId) {
     id
     title
