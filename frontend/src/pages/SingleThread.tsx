@@ -7,8 +7,6 @@ import Layout from "@/components/Layout";
 import { useGetThreadByIdQuery } from "@/gql/generated";
 import { useThreadActions } from "@/lib/hooks/useThreadActions";
 
-
-
 const SingleThread = () => {
   // Url params
   const { threadId } = useParams();
@@ -67,6 +65,11 @@ const SingleThread = () => {
           onClick={() => handleLike(Number(thread?.id), getLocalLiked(Number(thread?.id)))}
         />
 
+        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+          at {thread?.createdAt ? new Date(thread.createdAt).toLocaleString() : "unknown time"}
+        </p>
+
+
         <form onSubmit={handleComment} className="flex gap-2">
           <Input
             placeholder="Write a comment..."
@@ -81,6 +84,9 @@ const SingleThread = () => {
             <div key={c.id} className="border-t border-gray-200 dark:border-gray-700 pt-2 text-sm">
               <strong className="text-gray-700 dark:text-gray-300">{c.user.email}:</strong>{" "}
               <span className="text-gray-800 dark:text-gray-100">{c.content}</span>
+              <span className="text-xs text-gray-500 dark:text-gray-400 ml-4 whitespace-nowrap text-right">
+                {new Date(c.createdAt).toLocaleString()}
+              </span>
         </div>
           ))}
         </div>

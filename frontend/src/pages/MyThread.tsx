@@ -173,6 +173,9 @@ const MyThreads: React.FC = () => {
                     <p className="text-sm text-muted-foreground mt-2 text-gray-600 dark:text-gray-300">
                       by you
                     </p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                    at {new Date(thread.createdAt).toLocaleString()}
+                    </p>
                   </Link>
                 </CardContent>
                 <div className="flex items-center justify-end gap-4 px-4 pb-4">
@@ -200,6 +203,7 @@ const MyThreads: React.FC = () => {
                       id: c.id.toString(),
                       author: c.user.email,
                       content: c.content,
+                      createdAt: c.createdAt,
                     }))}
                     onAddComment={(userIdStr, threadIdStr, content) =>
                       handleAddComment(Number(userIdStr) ,Number(threadIdStr), content)

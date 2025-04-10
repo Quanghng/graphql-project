@@ -85,6 +85,9 @@ const Home = () => {
                   <p className="text-sm text-muted-foreground mt-2 text-gray-600 dark:text-gray-300">
                     by {thread.user.email}
                   </p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                    at {new Date(thread.createdAt).toLocaleString()}
+                  </p>
                 </CardContent>
               </Link>
               <div className="flex items-center justify-end gap-4 px-4 pb-4">
@@ -110,6 +113,7 @@ const Home = () => {
                     id: c.id,
                     author: c.user.email,
                     content: c.content,
+                    createdAt: c.createdAt
                   }))}
                   onAddComment={handleAddComment}
                 />

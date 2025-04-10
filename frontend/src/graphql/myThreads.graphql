@@ -8,6 +8,7 @@ query GetUserWithThreads($id: Int!) {
       id
       title
       content
+      createdAt  
       likes
       comments {
         id
@@ -15,6 +16,7 @@ query GetUserWithThreads($id: Int!) {
         user {
           email
         }
+      createdAt  
       }
     }
   }

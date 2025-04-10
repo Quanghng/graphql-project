@@ -6,6 +6,7 @@ interface Comment {
   id: string;
   author: string;
   content: string;
+  createdAt: string;
 }
 
 interface CommentSectionProps {
@@ -43,6 +44,9 @@ const CommentSection = ({ userId, threadId, comments, onAddComment }: CommentSec
         {comments.map((c) => (
           <div key={c.id} className="text-sm text-gray-700 dark:text-gray-200">
             <span className="font-medium">{c.author}:</span> {c.content}
+            <div className="text-xs text-gray-500 dark:text-gray-400 mt-1 text-right ml-auto">
+             at {new Date(c.createdAt).toLocaleString()}
+          </div>
           </div>
         ))}
       </div>
