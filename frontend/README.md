@@ -68,7 +68,7 @@ It will regenerate `gql/generated.ts`.
 - ✅ Profile display (first name, last name, email)
 - ✅ View all threads or user’s own threads
 - ✅ Edit & delete threads
-- ✅ Like system (local persistence)
+- ✅ Like system 
 - ✅ Comment on threads with timestamps
 - ✅ Dark mode toggle
 
