@@ -40,7 +40,7 @@ Make sure your backend (NestJS) is running at the correct URL and port (usually 
 
 ---
 
-## 4. Regenerate GraphQL Types
+### 4. Regenerate GraphQL Types
 
 Run this when the backend GraphQL schema changes:
 
