@@ -1,4 +1,4 @@
-🥘 **Eatstagram – Fullstack Application**  
+# 🥘 **Eatstagram – Fullstack Application**  
 Eatstagram is a modern fullstack social app that lets users create, like, and comment on cooking recipes ("threads") with a clean UI and robust backend.
 
 This application consists of two main parts:
