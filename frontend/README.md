@@ -38,17 +38,9 @@ npm install
 
 Make sure your backend (NestJS) is running at the correct URL and port (usually `http://localhost:3333`).
 
-### 4. Start the development server
-
-```bash
-npm run dev
-```
-
-The app will be available at `http://localhost:5174`.
-
 ---
 
-## 📡 Regenerate GraphQL Types
+## 4. Regenerate GraphQL Types
 
 Run this when the backend GraphQL schema changes:
 
@@ -57,6 +49,16 @@ npm run generate
 ```
 
 It will regenerate `gql/generated.ts`.
+
+---
+
+### 5. Start the development server
+
+```bash
+npm run dev
+```
+
+The app will be available at `http://localhost:5174`.
 
 ---
 
